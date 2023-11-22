@@ -23,10 +23,11 @@ func sendMail() {
 		"smtp.gmail.com",
 	)
 
-	msg := "Subject: test \n hello world"
+	msg := "Subject: test \r\n\r\n hello world"
 
+	// Connect to the server, enable TLS, and send the mail
 	err = smtp.SendMail(
-		"smtp.google.com",
+		"smtp.gmail.com:587",
 		auth,
 		"poznajprawdejp2@gmail.com",
 		[]string{"pecet3107@gmail.com"},
