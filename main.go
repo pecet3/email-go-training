@@ -23,7 +23,11 @@ func sendMail() {
 		"smtp.gmail.com",
 	)
 
-	msg := "Subject: hello from go lang! \r\n\r\n hello my dad, sending from gmail with go lang works! have a good day and keep the code. please do not forget our blog project ;)"
+	subject := "Informacja"
+
+	body := "Lorem Ipsum"
+
+	msg := "Subject:" + subject + "\r\n\r\n" + body
 
 	// Connect to the server, enable TLS, and send the mail
 	err = smtp.SendMail(
