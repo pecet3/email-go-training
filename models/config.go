@@ -2,16 +2,23 @@ package models
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
+	"os"
 
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
 var db *sql.DB
 
 func Config() {
-	var err error
-	db, err = sql.Open("postgres", "user=your_user_name dbname=your_database_name sslmode=disable")
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("error dotenv")
+	}
+	passwordDb := os.Getenv("PASSWORD_DB")
+	db, err = sql.Open("postgres", "user=u111 dbname=db_u111 host=psql01.mikr.us password="+passwordDb+" sslmode=disable")
 	if err != nil {
 		log.Println("config error:", err)
 		return
