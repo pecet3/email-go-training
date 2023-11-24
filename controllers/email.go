@@ -1,26 +1,46 @@
 package controllers
 
 import (
-	"encoding/json"
 	"fmt"
+	"html/template"
 	"log"
 	"mails/models"
 	"net/http"
 )
 
 func AddEmail(w http.ResponseWriter, r *http.Request) {
-	email := &models.Email{}
-	// Odczytanie ciała żądania
-	err := json.NewDecoder(r.Body).Decode(&email)
-	if err != nil {
-		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+	if r.Method == http.MethodGet {
+		// Renderowanie strony HTML z formularzem
+		tmpl, err := template.ParseFiles("view/index.html")
+		if err != nil {
+			log.Println("Failed to parse HTML template:", err)
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+
+		err = tmpl.Execute(w, nil)
+		if err != nil {
+			log.Println("Failed to execute HTML template:", err)
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
 		return
 	}
 
-	// Dodanie adresu e-mail do bazy danych
+	email := &models.Email{}
+
+	err := r.ParseForm()
+	if err != nil {
+		log.Println("Failed to parse form:", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	// Pobranie wartości z formularza
+	email.Name = r.Form.Get("name")
+	email.Email = r.Form.Get("email")
 
 	err = email.CreateEmailAddress()
-
 	if err != nil {
 		log.Println("Failed to create email address:", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
