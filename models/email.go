@@ -11,6 +11,7 @@ type Email struct {
 }
 
 func (e *Email) CreateEmailAddress() error {
+
 	_, err := db.Exec("INSERT INTO emailAddresses (name, email) VALUES ($1, $2)", e.Name, e.Email)
 	if err != nil {
 		log.Println("Failed to insert email address:", err)
