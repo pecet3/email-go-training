@@ -3,6 +3,7 @@ package email
 import (
 	"fmt"
 	"log"
+	"mails/models"
 	"net/smtp"
 	"os"
 	"strconv"
@@ -46,6 +47,14 @@ func SendMail() {
 
 	msg := "Subject:" + subject + "\r\n\r\n" + body
 
+	emailAddresses, err := models.GetEmailAddresses()
+
+	var emails []string
+
+	for _, e := range emailAddresses {
+		emails = append(emails, e.Email)
+	}
+
 	err = smtp.SendMail(
 		"smtp.gmail.com:587",
 		auth,
@@ -54,7 +63,7 @@ func SendMail() {
 		[]byte(msg),
 	)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 }
 
